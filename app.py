@@ -20,21 +20,22 @@ def get_menu():
 st.title("🍴 Supabase-Powered Bistro")
 
 menu_data = get_menu()
+st.write(menu_data)
 
 # Format menu for the AI System Prompt
 menu_context = "\n".join([f"- {item['item']}: {item['description']} ${item['hot']}" for item in menu_data])
 
 # Sidebar Management
-with st.sidebar:
-    st.header("Add New Item")
-    with st.form("menu_form"):
-        name = st.text_input("Item Name")
-        desc = st.text_area("Description")
-        price = st.number_input("Price", min_value=0.0)
-        if st.form_submit_button("Add to Database"):
-            add_menu_item(name, desc, price)
-            st.success("Added!")
-            st.rerun()
+# with st.sidebar:
+#     st.header("Add New Item")
+#     with st.form("menu_form"):
+#         name = st.text_input("Item Name")
+#         desc = st.text_area("Description")
+#         price = st.number_input("Price", min_value=0.0)
+#         if st.form_submit_button("Add to Database"):
+#             add_menu_item(name, desc, price)
+#             st.success("Added!")
+#             st.rerun()
 
 # (The rest of your OpenAI chat logic goes here, using 'menu_context' as before)
 st.write("### Current Live Menu")

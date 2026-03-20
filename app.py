@@ -12,9 +12,9 @@ def get_menu():
     return rows.data
 
 # 3. Function to Add Menu Item
-def add_menu_item(name, desc, price):
-    conn.table("menu").insert({"name": name, "description": desc, "price": price}).execute()
-    st.cache_data.clear() # Clear cache so the UI updates
+# def add_menu_item(name, desc, price):
+#     conn.table("menu").insert({"name": name, "description": desc, "price": price}).execute()
+#     st.cache_data.clear() # Clear cache so the UI updates
 
 # --- UI Logic ---
 st.title("🍴 Supabase-Powered Bistro")
@@ -22,7 +22,7 @@ st.title("🍴 Supabase-Powered Bistro")
 menu_data = get_menu()
 
 # Format menu for the AI System Prompt
-menu_context = "\n".join([f"- {item['name']}: {item['description']} ${item['price']}" for item in menu_data])
+menu_context = "\n".join([f"- {item['item']}: {item['description']} ${item['hot']}" for item in menu_data])
 
 # Sidebar Management
 with st.sidebar:

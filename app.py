@@ -1,5 +1,6 @@
 import streamlit as st
 from openai import OpenAI
+from st_supabase_connection import SupabaseConnection
 
 # 1. Initialize Connection
 conn = st.connection("supabase", type=SupabaseConnection)

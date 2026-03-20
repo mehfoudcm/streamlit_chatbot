@@ -9,7 +9,7 @@ with st.sidebar:
     # Model Selection
     selected_model = st.selectbox(
         "Select Model",
-        ["gpt-4o", "gpt-4-turbo", "gpt-3.5-turbo"],
+        ["gpt-4o-mini", "gpt-5.4-nano"],
         index=0
     )
     

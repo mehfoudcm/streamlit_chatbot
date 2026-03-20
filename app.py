@@ -41,10 +41,10 @@ if "messages" not in st.session_state:
     ]
 
 # Display chat history (skipping the system prompt)
-for message in st.session_state.messages:
-    if message["role"] != "system":
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+# for message in st.session_state.messages:
+#     if message["role"] != "system":
+#         with st.chat_message(message["role"]):
+#             st.markdown(message["content"])
 
 # User Interaction
 if prompt := st.chat_input("What's on the menu?"):

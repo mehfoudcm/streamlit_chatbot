@@ -1,6 +1,28 @@
 import streamlit as st
 from openai import OpenAI
 
+
+# --- Sidebar Configuration ---
+with st.sidebar:
+    st.title("⚙️ Model Settings")
+    
+    # Model Selection
+    selected_model = st.selectbox(
+        "Select Model",
+        ["gpt-4o", "gpt-4-turbo", "gpt-3.5-turbo"],
+        index=0
+    )
+    
+    # Hyperparameters
+    temp = st.slider("Temperature", min_value=0.0, max_value=2.0, value=0.7, step=0.1)
+    max_tokens = st.number_input("Max Tokens", min_value=50, max_value=4000, value=1000)
+    
+    st.divider()
+    if st.button("Clear Chat History"):
+        st.session_state.messages = []
+        st.rerun()
+
+# --- Main Chatbot ---
 st.title("AI Assistant")
 
 # 1. Initialize the client using Streamlit Secrets

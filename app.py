@@ -1,54 +1,42 @@
 import streamlit as st
 from openai import OpenAI
 
-# 1. Define your Menu Dictionary
-# In a real-world scenario, you might load this from a JSON or SQL database.
+# 1. Menu Data
 MENU_ITEMS = {
-    "Truffle Fries": "Crispy golden fries tossed in white truffle oil and topped with shaved parmesan and fresh parsley. $12",
-    "Spicy Tuna Roll": "Fresh ahi tuna, cucumber, and avocado topped with spicy mayo and toasted sesame seeds. $16",
-    "Classic Smash Burger": "Two grass-fed beef patties, American cheese, caramelized onions, and secret sauce on a brioche bun. $15",
-    "Garden Risotto": "Creamy Arborio rice with spring peas, asparagus, and a hint of lemon zest. $19 (Vegetarian)",
-    "Matcha Cheesecake": "Velvety green tea cheesecake with a black sesame crust. $9"
+    "Truffle Fries": "Crispy golden fries with truffle oil and parmesan. $12",
+    "Spicy Tuna Roll": "Fresh ahi tuna and avocado. $16",
+    "Classic Smash Burger": "Two beef patties and secret sauce. $15",
+    "Garden Risotto": "Creamy rice with spring peas and lemon. $19",
+    "Matcha Cheesecake": "Green tea cheesecake with sesame crust. $9"
 }
 
-# Format the menu as a string for the System Prompt
 menu_context = "\n".join([f"- {name}: {desc}" for name, desc in MENU_ITEMS.items()])
 
 st.title("🍴 The Bistro Assistant")
 
-# Sidebar for model settings
+# Sidebar
 with st.sidebar:
     st.header("Settings")
-    model_choice = st.selectbox("Model", ["gpt-5.4-nano", "gpt-4o-mini"], index=0)
+    # FIX: Ensure you are using model names your API key has access to
+    model_choice = st.selectbox("Model", ["gpt-4o-mini", "gpt-3.5-turbo"], index=0)
     if st.button("Reset Chat"):
-        st.session_state.messages = []
+        st.session_state.chat_history = [] # Use a different key for clarity
         st.rerun()
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-if "messages" not in st.session_state:
-    # 2. Inject the System Prompt
-    # This tells the bot exactly how to behave and what data to use.
-    st.session_state.messages = [
-        {"role": "system", "content": f"""
-        You are a helpful and charismatic restaurant server. 
-        Your goal is to answer questions ONLY about the following menu:
-        {menu_context}
-        
-        If a customer asks about an item not on this list, politely let them know 
-        it isn't available today and suggest a similar item from the menu.
-        """}
-    ]
+# 2. Initialize ONLY the conversation history (not the system prompt)
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
-# Display chat history (skipping the system prompt)
-# for message in st.session_state.messages:
-#     if message["role"] != "system":
-#         with st.chat_message(message["role"]):
-#             st.markdown(message["content"])
+# Display history
+for message in st.session_state.chat_history:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-# User Interaction
+# 3. Handle Input
 if prompt := st.chat_input("What's on the menu?"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.session_state.chat_history.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
@@ -56,15 +44,24 @@ if prompt := st.chat_input("What's on the menu?"):
         response_placeholder = st.empty()
         full_response = ""
         
-        # Calling the API with the menu context included in history
-        for response in client.chat.completions.create(
-            model=model_choice,
-            messages=st.session_state.messages,
-            stream=True,
-        ):
-            full_response += (response.choices[0].delta.content or "")
-            response_placeholder.markdown(full_response + "▌")
-        
-        response_placeholder.markdown(full_response)
-    
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
+        # FIX: Prepend the System Message HERE, every time.
+        # This ensures the model NEVER forgets the menu.
+        messages_to_send = [
+            {"role": "system", "content": f"You are a helpful server. Only talk about this menu:\n{menu_context}"}
+        ] + st.session_state.chat_history
+
+        try:
+            for response in client.chat.completions.create(
+                model=model_choice,
+                messages=messages_to_send,
+                stream=True,
+            ):
+                content = response.choices[0].delta.content or ""
+                full_response += content
+                response_placeholder.markdown(full_response + "▌")
+            
+            response_placeholder.markdown(full_response)
+            st.session_state.chat_history.append({"role": "assistant", "content": full_response})
+            
+        except Exception as e:
+            st.error(f"OpenAI Error: {e}")

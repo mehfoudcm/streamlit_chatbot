@@ -1,16 +1,43 @@
 import streamlit as st
 from openai import OpenAI
 
-# 1. Menu Data
-MENU_ITEMS = {
-    "Truffle Fries": "Crispy golden fries with truffle oil and parmesan. $12",
-    "Spicy Tuna Roll": "Fresh ahi tuna and avocado. $16",
-    "Classic Smash Burger": "Two beef patties and secret sauce. $15",
-    "Garden Risotto": "Creamy rice with spring peas and lemon. $19",
-    "Matcha Cheesecake": "Green tea cheesecake with sesame crust. $9"
-}
+# 1. Initialize Connection
+conn = st.connection("supabase", type=SupabaseConnection)
 
-menu_context = "\n".join([f"- {name}: {desc}" for name, desc in MENU_ITEMS.items()])
+# 2. Function to Fetch Menu
+def get_menu():
+    # Query the 'menu' table we created in Step 1
+    rows = conn.query("*", table="menu").execute()
+    return rows.data
+
+# 3. Function to Add Menu Item
+def add_menu_item(name, desc, price):
+    conn.table("menu").insert({"name": name, "description": desc, "price": price}).execute()
+    st.cache_data.clear() # Clear cache so the UI updates
+
+# --- UI Logic ---
+st.title("🍴 Supabase-Powered Bistro")
+
+menu_data = get_menu()
+
+# Format menu for the AI System Prompt
+menu_context = "\n".join([f"- {item['name']}: {item['description']} ${item['price']}" for item in menu_data])
+
+# Sidebar Management
+with st.sidebar:
+    st.header("Add New Item")
+    with st.form("menu_form"):
+        name = st.text_input("Item Name")
+        desc = st.text_area("Description")
+        price = st.number_input("Price", min_value=0.0)
+        if st.form_submit_button("Add to Database"):
+            add_menu_item(name, desc, price)
+            st.success("Added!")
+            st.rerun()
+
+# (The rest of your OpenAI chat logic goes here, using 'menu_context' as before)
+st.write("### Current Live Menu")
+st.dataframe(menu_data)
 
 st.title("🍴 The Bistro Assistant")
 

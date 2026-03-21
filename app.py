@@ -4,7 +4,7 @@ from openai import OpenAI
 from supabase import create_client, Client
 
 # 1. Initialize the Supabase Client
-# @st.cache_resource
+@st.cache_resource
 def init_connection():
     url = st.secrets["SUPABASE_URL"]
     key = st.secrets["SUPABASE_KEY"]
@@ -45,11 +45,14 @@ st.write(menu_items)
 # --- UI Logic ---
 st.title("🍴 Supabase-Powered Bistro")
 
-#menu_data = get_menu()
-st.write(menu_items)
+
 
 # Format menu for the AI System Prompt
-menu_context = "\n".join([f"- {item['item']}: {item['description']} ${item['hot']}" for item in menu_data])
+menu_context = "\n".join([f"""- {item['item']}: {item['description']},
+                            {'as a hot meal,' if item['hot'] else ''} 
+                            takes {item['time_in_min']} minutes to get ready to eat, 
+                            {'is homemade, ' if item['homemade'] else ''}
+                            {'allows us to sit in if not homemade' if item['sit_in'] else 'is a takeout meal'}""" for item in menu_items])
 
 # Sidebar Management
 # with st.sidebar:

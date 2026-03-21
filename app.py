@@ -38,14 +38,16 @@ menu_context = "\n".join([f"""- {item['item']}: {item['description']},
                             {item['ingredients'] if item['homemade'] else ''} 
                             {'allows us to sit in if not homemade' if item['sit_in'] else 'is a takeout meal'}""" for item in menu_items])
 
-def add_to_menu(name, desc, price, is_hot):
-    # Prepare the payload
-    # Ensure your Supabase table has a column named 'hot' (boolean)
+def add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing):
+
     new_row = {
         "name": name,
         "description": desc,
-        "price": price,
-        "hot": is_hot
+        "hot": is_hot,
+        "time_in_min": time,
+        "sit_in": sit_in,
+        "homemade": homemade,
+        "ingredients": ing
     }
     
     try:
@@ -67,16 +69,22 @@ with st.sidebar:
     with st.form("menu_form", clear_on_submit=True):
         name = st.text_input("Item Name")
         desc = st.text_area("Description")
-        price = st.number_input("Price ($)", min_value=0.0, step=0.5)
         
         # Adding the 'hot' functionality
-        is_hot = st.checkbox("Is this item spicy? 🔥")
+        is_hot = st.checkbox("Is this item typically hot? 🔥")
+
+        time = st.text_input("How long in minutes does this dish take?")
+        
+        homemade = st.checkbox("Are we making this dish at home?")
+        sit_in = st.checkbox("Are we typically sitting in if this isn't at home?")
+
+        ing = st.text_area("What ingredients are needed for this dish to be made, including sides?")
         
         if st.form_submit_button("Add to Menu"):
             if name and desc:
-                add_to_menu(name, desc, price, is_hot)
+                add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing)
             else:
-                st.warning("Please fill out the Name and Description.")
+                st.warning("Please fill out the details!")
 
 # (The rest of your OpenAI chat logic goes here, using 'menu_context' as before)
 # st.write("### Current Live Menu")

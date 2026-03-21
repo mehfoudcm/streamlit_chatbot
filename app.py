@@ -43,8 +43,8 @@ menu_items = response.data # This returns a list of dictionaries
 # --- UI Logic ---
 st.title("🍴 Supabase-Powered Bistro")
 
-menu_data = get_menu()
-st.write(menu_data)
+#menu_data = get_menu()
+st.write(menu_items)
 
 # Format menu for the AI System Prompt
 menu_context = "\n".join([f"- {item['item']}: {item['description']} ${item['hot']}" for item in menu_data])

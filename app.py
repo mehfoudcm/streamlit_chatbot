@@ -78,7 +78,7 @@ with st.sidebar:
         # Adding the 'hot' functionality
         is_hot = st.checkbox("Is this item typically hot? 🔥")
 
-        time = st.text_input("How long in minutes does this dish take?")
+        time = st.text_input("How long does this dish take? 🕒 (in minutes)")
         
         homemade = st.checkbox("Are we making this dish at home? 🏠 ")
         sit_in = st.checkbox("Are we typically sitting in if this isn't at home? 🪑")

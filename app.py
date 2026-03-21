@@ -146,7 +146,8 @@ if prompt := st.chat_input("What's on the menu?"):
 
         try:
             for response in client.chat.completions.create(
-                model=model_choice,
+                model="gpt-4o-mini",
+                # model = model_choice
                 messages=messages_to_send,
                 stream=True,
             ):

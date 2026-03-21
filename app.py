@@ -41,7 +41,7 @@ menu_context = "\n".join([f"""- {item['item']}: {item['description']},
 def add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing):
 
     new_row = {
-        "name": name,
+        "item": name,
         "description": desc,
         "hot": is_hot,
         "time_in_min": time,

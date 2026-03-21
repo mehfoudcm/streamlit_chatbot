@@ -36,7 +36,7 @@ menu_context = "\n".join([f"""- {item['item']}: {item['description']},
                             takes {item['time_in_min']} minutes to get ready to eat, 
                             {'is homemade not takeout with ' if item['homemade'] else ''}
                             {item['ingredients'] if item['homemade'] else ''} 
-                            {'allows us to sit in if not homemade' if item['sit_in'] and ~item['homemade'] else 'is a takeout meal'}""" for item in menu_items])
+                            {'allows us to sit in if not homemade' if item['sit_in'] and !item['homemade'] else 'is a takeout meal'}""" for item in menu_items])
 
 
 def add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing, whothis):

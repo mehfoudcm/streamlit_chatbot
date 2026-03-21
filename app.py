@@ -38,7 +38,7 @@ menu_context = "\n".join([f"""- {item['item']}: {item['description']},
                             {item['ingredients'] if item['homemade'] else ''} 
                             {'allows us to sit in if not homemade' if item['sit_in'] else 'is a takeout meal'}""" for item in menu_items])
 
-def add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing):
+def add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing, whothis):
 
     new_row = {
         "item": name,
@@ -47,7 +47,8 @@ def add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing):
         "time_in_min": time,
         "sit_in": sit_in,
         "homemade": homemade,
-        "ingredients": ing
+        "ingredients": ing,
+        "added_by": whothis
     }
     
     try:
@@ -79,10 +80,11 @@ with st.sidebar:
         sit_in = st.checkbox("Are we typically sitting in if this isn't at home?")
 
         ing = st.text_area("What ingredients are needed for this dish to be made, including sides?")
-        
+
+        whothis = st.text_input("Who is adding this menu item?")
         if st.form_submit_button("Add to Menu"):
             if name and desc:
-                add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing)
+                add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing, whothis)
             else:
                 st.warning("Please fill out the details!")
 

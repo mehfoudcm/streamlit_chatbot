@@ -28,7 +28,7 @@ menu_items = response.data # This returns a list of dictionaries
 
 
 # Alphabetize by the 'name' key
-sorted_menu = sorted(menu_items, key=lambda x: x['items'].lower())
+sorted_menu = sorted(menu_items, key=lambda x: x['item'].lower())
 # --- UI Logic ---
 
 

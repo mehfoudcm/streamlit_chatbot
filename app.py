@@ -80,8 +80,8 @@ with st.sidebar:
 
         time = st.text_input("How long in minutes does this dish take?")
         
-        homemade = st.checkbox("Are we making this dish at home?")
-        sit_in = st.checkbox("Are we typically sitting in if this isn't at home?")
+        homemade = st.checkbox("Are we making this dish at home? 🏠 ")
+        sit_in = st.checkbox("Are we typically sitting in if this isn't at home? 🪑")
 
         ing = st.text_area("What ingredients are needed for this dish to be made, including sides?")
 

@@ -26,6 +26,9 @@ st.title("What's for dinner?")
 response = run_query()
 menu_items = response.data # This returns a list of dictionaries
 
+
+# Alphabetize by the 'name' key
+sorted_menu = sorted(menu_items, key=lambda x: x['items'].lower())
 # --- UI Logic ---
 
 
@@ -89,6 +92,16 @@ with st.sidebar:
             else:
                 st.warning("Please fill out the details!")
 
+    st.divider()
+
+    # --- Section B: Simple Alphabetical List ---
+    st.subheader("Current Menu")
+    
+    # This creates a scrollable area if the list gets long
+    for item in sorted_menu:
+        # Just showing the name as requested
+        st.write(f"• {item['item']}")
+        
 # (The rest of your OpenAI chat logic goes here, using 'menu_context' as before)
 # st.write("### Current Live Menu")
 # st.dataframe(menu_items)
@@ -99,7 +112,7 @@ with st.sidebar:
 with st.sidebar:
     st.header("Settings")
     # FIX: Ensure you are using model names your API key has access to
-    model_choice = st.selectbox("Model", ["gpt-4o-mini", "gpt-3.5-turbo"], index=0)
+    # model_choice = st.selectbox("Model", ["gpt-4o-mini", "gpt-3.5-turbo"], index=0)
     if st.button("Reset Chat"):
         st.session_state.chat_history = [] # Use a different key for clarity
         st.rerun()

@@ -29,6 +29,9 @@ menu_items = response.data # This returns a list of dictionaries
 
 # Alphabetize by the 'name' key
 sorted_menu = sorted(menu_items, key=lambda x: x['item'].lower())
+
+display_df = pd.DataFrame(sorted_menu)
+
 # --- UI Logic ---
 
 
@@ -98,9 +101,19 @@ with st.sidebar:
     st.subheader("Current Menu")
     
     # This creates a scrollable area if the list gets long
-    for item in sorted_menu:
-        # Just showing the name as requested
-        st.write(f"• {item['item']}")
+    # height=300 keeps it from taking over the whole sidebar
+    # use_container_width=True ensures it fits the sidebar width
+    st.dataframe(
+        display_df, 
+        height=300, 
+        use_container_width=True,
+        hide_index=True, # Saves horizontal space
+        column_config={
+            "item": "Item"
+        }
+    )
+    
+    st.caption("Scroll ↕ to see all items")
         
 # (The rest of your OpenAI chat logic goes here, using 'menu_context' as before)
 # st.write("### Current Live Menu")

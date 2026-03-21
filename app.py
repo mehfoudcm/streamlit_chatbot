@@ -9,6 +9,7 @@ conn = st.connection("supabase", type=SupabaseConnection)
 def get_menu():
     # Query the 'menu' table we created in Step 1
     rows = conn.table("menu").select("*").execute()
+    print(rows)
     return rows.data
 
 # 3. Function to Add Menu Item

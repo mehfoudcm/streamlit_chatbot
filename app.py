@@ -1,16 +1,39 @@
 import streamlit as st
 from openai import OpenAI
-from st_supabase_connection import SupabaseConnection
+# from st_supabase_connection import SupabaseConnection
+from supabase import create_client, Client
 
-# 1. Initialize Connection
-conn = st.connection("supabase", type=SupabaseConnection)
+# 1. Initialize the Supabase Client
+@st.cache_resource
+def init_connection():
+    url = st.secrets["SUPABASE_URL"]
+    key = st.secrets["SUPABASE_KEY"]
+    return create_client(url, key)
 
-# 2. Function to Fetch Menu
-def get_menu():
-    # Query the 'menu' table we created in Step 1
-    rows = conn.table("menu").select("*").execute()
-    st.write(rows)
-    return rows.data
+supabase = init_connection()
+
+# 2. Function to Query Data
+# We use st.cache_data to prevent hitting the DB on every user chat toggle
+@st.cache_data(ttl=600) # Cache for 10 minutes
+def run_query():
+    # .select("*") fetches all columns; .execute() returns the response object
+    return supabase.table("menu").select("*").execute()
+
+# --- Main App Logic ---
+st.title("🍴 Live Menu Chatbot")
+
+# Fetch the data
+response = run_query()
+menu_items = response.data # This returns a list of dictionaries
+# # 1. Initialize Connection
+# conn = st.connection("supabase", type=SupabaseConnection)
+
+# # 2. Function to Fetch Menu
+# def get_menu():
+#     # Query the 'menu' table we created in Step 1
+#     rows = conn.table("menu").select("*").execute()
+#     st.write(rows)
+#     return rows.data
 
 # 3. Function to Add Menu Item
 # def add_menu_item(name, desc, price):

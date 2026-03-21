@@ -68,7 +68,7 @@ menu_context = "\n".join([f"""- {item['item']}: {item['description']},
 
 # (The rest of your OpenAI chat logic goes here, using 'menu_context' as before)
 st.write("### Current Live Menu")
-st.dataframe(menu_data)
+st.dataframe(menu_items)
 
 st.title("🍴 The Bistro Assistant")
 

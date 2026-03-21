@@ -20,7 +20,7 @@ def run_query():
     return supabase.table("menu").select("*").execute()
 
 # --- Main App Logic ---
-st.title("🍴 Live Menu Chatbot")
+st.title("What's for dinner?")
 
 # Fetch the data
 response = run_query()
@@ -43,7 +43,7 @@ menu_items = response.data # This returns a list of dictionaries
 #     st.cache_data.clear() # Clear cache so the UI updates
 
 # --- UI Logic ---
-st.title("🍴 Supabase-Powered Bistro")
+# st.title("🍴 Supabase-Powered Bistro")
 
 
 
@@ -51,7 +51,8 @@ st.title("🍴 Supabase-Powered Bistro")
 menu_context = "\n".join([f"""- {item['item']}: {item['description']},
                             {'as a hot meal,' if item['hot'] else ''} 
                             takes {item['time_in_min']} minutes to get ready to eat, 
-                            {'is homemade, ' if item['homemade'] else ''}
+                            {'is homemade with ' if item['homemade'] else ''}
+                            {item['ingredients'] if item['homemade'] else ''} 
                             {'allows us to sit in if not homemade' if item['sit_in'] else 'is a takeout meal'}""" for item in menu_items])
 
 # Sidebar Management
@@ -67,10 +68,10 @@ menu_context = "\n".join([f"""- {item['item']}: {item['description']},
 #             st.rerun()
 
 # (The rest of your OpenAI chat logic goes here, using 'menu_context' as before)
-st.write("### Current Live Menu")
-st.dataframe(menu_items)
+# st.write("### Current Live Menu")
+# st.dataframe(menu_items)
 
-st.title("🍴 The Bistro Assistant")
+# st.title("🍴 The Bistro Assistant")
 
 # Sidebar
 with st.sidebar:

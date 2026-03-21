@@ -25,25 +25,8 @@ st.title("What's for dinner?")
 # Fetch the data
 response = run_query()
 menu_items = response.data # This returns a list of dictionaries
-# st.write(response)
-# st.write(menu_items)
-# # 1. Initialize Connection
-# conn = st.connection("supabase", type=SupabaseConnection)
-
-# # 2. Function to Fetch Menu
-# def get_menu():
-#     # Query the 'menu' table we created in Step 1
-#     rows = conn.table("menu").select("*").execute()
-#     st.write(rows)
-#     return rows.data
-
-# 3. Function to Add Menu Item
-# def add_menu_item(name, desc, price):
-#     conn.table("menu").insert({"name": name, "description": desc, "price": price}).execute()
-#     st.cache_data.clear() # Clear cache so the UI updates
 
 # --- UI Logic ---
-# st.title("🍴 Supabase-Powered Bistro")
 
 
 
@@ -55,17 +38,45 @@ menu_context = "\n".join([f"""- {item['item']}: {item['description']},
                             {item['ingredients'] if item['homemade'] else ''} 
                             {'allows us to sit in if not homemade' if item['sit_in'] else 'is a takeout meal'}""" for item in menu_items])
 
-# Sidebar Management
-# with st.sidebar:
-#     st.header("Add New Item")
-#     with st.form("menu_form"):
-#         name = st.text_input("Item Name")
-#         desc = st.text_area("Description")
-#         price = st.number_input("Price", min_value=0.0)
-#         if st.form_submit_button("Add to Database"):
-#             add_menu_item(name, desc, price)
-#             st.success("Added!")
-#             st.rerun()
+def add_to_menu(name, desc, price, is_hot):
+    # Prepare the payload
+    # Ensure your Supabase table has a column named 'hot' (boolean)
+    new_row = {
+        "name": name,
+        "description": desc,
+        "price": price,
+        "hot": is_hot
+    }
+    
+    try:
+        # Perform the Insert
+        result = supabase.table("menu").insert(new_row).execute()
+        
+        if result.data:
+            st.success(f"Successfully added {name}!")
+            # Clear cache so the chatbot sees the new menu immediately
+            st.cache_data.clear() 
+        else:
+            st.error("Insert failed. Check your RLS policies.")
+    except Exception as e:
+        st.error(f"Error connecting to database: {e}")
+
+# --- Sidebar Form ---
+with st.sidebar:
+    st.header("Add Menu Item")
+    with st.form("menu_form", clear_on_submit=True):
+        name = st.text_input("Item Name")
+        desc = st.text_area("Description")
+        price = st.number_input("Price ($)", min_value=0.0, step=0.5)
+        
+        # Adding the 'hot' functionality
+        is_hot = st.checkbox("Is this item spicy? 🔥")
+        
+        if st.form_submit_button("Add to Menu"):
+            if name and desc:
+                add_to_menu(name, desc, price, is_hot)
+            else:
+                st.warning("Please fill out the Name and Description.")
 
 # (The rest of your OpenAI chat logic goes here, using 'menu_context' as before)
 # st.write("### Current Live Menu")

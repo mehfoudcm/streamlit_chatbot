@@ -4,7 +4,7 @@ from openai import OpenAI
 from supabase import create_client, Client
 
 # 1. Initialize the Supabase Client
-@st.cache_resource
+# @st.cache_resource
 def init_connection():
     url = st.secrets["SUPABASE_URL"]
     key = st.secrets["SUPABASE_KEY"]

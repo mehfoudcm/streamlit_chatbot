@@ -25,6 +25,8 @@ st.title("🍴 Live Menu Chatbot")
 # Fetch the data
 response = run_query()
 menu_items = response.data # This returns a list of dictionaries
+st.write(response)
+st.write(menu_items)
 # # 1. Initialize Connection
 # conn = st.connection("supabase", type=SupabaseConnection)
 

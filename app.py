@@ -187,7 +187,7 @@ with st.sidebar:
         d = st.text_area("When did you eat it?")
         
         # Adding the 'hot' functionality
-        leftovers = st.checkbox("Is there any left?")
+        left = st.checkbox("Is there any left?")
         
         who = st.text_input("Who ate it?")
         if st.form_submit_button("Add to Eaten"):

@@ -1,6 +1,7 @@
 import streamlit as st
 from openai import OpenAI
 import pandas as pd
+from datetime import datetime, timedelta
 # from st_supabase_connection import SupabaseConnection
 from supabase import create_client, Client
 

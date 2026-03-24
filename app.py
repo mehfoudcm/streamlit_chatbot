@@ -52,7 +52,7 @@ if not df_eaten.empty:
     
     # 4. Create a Category Column (The "Logic")
     def categorize_freshness(days):
-        if days <= 5: return "are good"
+        if days <= 5: return "are fresh"
         return "are bad"
 
     df_eaten['freshness'] = df_eaten['days_ago'].apply(categorize_freshness)

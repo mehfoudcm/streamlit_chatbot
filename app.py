@@ -81,6 +81,7 @@ meal_context = "\n".join([f"""- {meal_eaten} was eaten on {date_eaten},
                                                                                                                       df_eaten['date_eaten'],
                                                                                                                       df_eaten['leftovers'], 
                                                                                                                       df_eaten['freshness'])]) 
+st.write(meal_context)
 
 def add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing, whothis):
 

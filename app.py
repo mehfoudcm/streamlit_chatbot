@@ -57,6 +57,8 @@ if not df_eaten.empty:
 
     df_eaten['freshness'] = df_eaten['days_ago'].apply(categorize_freshness)
 
+st.dataframe(df_eaten)
+
 # Alphabetize by the 'name' key
 sorted_menu = sorted(menu_items, key=lambda x: x['item'].lower())
 

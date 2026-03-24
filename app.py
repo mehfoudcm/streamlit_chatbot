@@ -77,7 +77,7 @@ menu_context = "\n".join([f"""- {item['item']}: {item['description']},
                             {'allows us to sit in if not homemade' if item['sit_in'] and not item['homemade'] else 'is a takeout meal'}""" for item in menu_items])
 
 meal_context = "\n".join([f"""- {meal_eaten} was eaten on {date_eaten}, 
-                             {'and leftovers {freshness},' if {leftovers} else ''} """ for meal_eaten, date_eaten, leftovers, freshness in zip(df_eaten['meal_eaten'],
+                             {'and leftovers ' {freshness} if {leftovers} else ''} """ for meal_eaten, date_eaten, leftovers, freshness in zip(df_eaten['meal_eaten'],
                                                                                                                       df_eaten['date_eaten'],
                                                                                                                       df_eaten['leftovers'], 
                                                                                                                       df_eaten['freshness'])]) 

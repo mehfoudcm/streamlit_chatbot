@@ -57,7 +57,7 @@ if not df_eaten.empty:
 
     df_eaten['freshness'] = df_eaten['days_ago'].apply(categorize_freshness)
 
-st.dataframe(df_eaten)
+# st.dataframe(df_eaten)
 
 # Alphabetize by the 'name' key
 sorted_menu = sorted(menu_items, key=lambda x: x['item'].lower())
@@ -86,7 +86,7 @@ meal_context = "\n".join([
                                 df_eaten['freshness']
                             )
                         ])
-st.write(meal_context)
+# st.write(meal_context)
 
 def add_to_menu(name, desc, is_hot, time, sit_in, homemade, ing, whothis):
 

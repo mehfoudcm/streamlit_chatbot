@@ -78,7 +78,7 @@ menu_context = "\n".join([f"""- {item['item']}: {item['description']},
 
 meal_context = "\n".join([
                             f"- {meal_eaten} was eaten on {date_eaten} "
-                            f"{f'and leftovers are {freshness}' if leftovers else ''}" 
+                            f"{f'and leftovers {freshness}' if leftovers else ''}" 
                             for meal_eaten, date_eaten, leftovers, freshness in zip(
                                 df_eaten['meal_eaten'], 
                                 df_eaten['date_eaten'], 

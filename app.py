@@ -191,8 +191,10 @@ with st.sidebar:
         
         who = st.text_input("Who ate it?")
         if st.form_submit_button("Add to Eaten"):
-            if name and desc:
-                add_to_eaten(meal, d, left, who)
+            if meal and who:
+
+                final_date = d.strip() if d.strip() else datetime.now().strftime("%Y-%m-%d")
+                add_to_eaten(meal, final_date, left, who)
             else:
                 st.warning("Please fill out the details!")
     

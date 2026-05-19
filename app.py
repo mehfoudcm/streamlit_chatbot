@@ -186,7 +186,7 @@ with st.sidebar:
         
 
         # Create the dropdown
-        meal = st.selectbox("What did you eat?", pd.DataFrame(sorted_menu)[['item']], placeholder="Choose a meal from menu")
+        meal = st.selectbox("What did you eat?", pd.DataFrame(sorted_menu)[['item']], index=None, placeholder="Choose a meal from menu")
         # meal = st.text_input("What did you eat?")
         d = st.text_area("When did you eat it?")
         

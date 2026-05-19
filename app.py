@@ -183,7 +183,11 @@ with st.sidebar:
     # (The rest of your OpenAI chat logic goes here, using 'menu_context' as before)
     st.header("Add Meal Eaten")
     with st.form("meal_form", clear_on_submit=True):
-        meal = st.text_input("What did you eat?")
+        
+
+        # Create the dropdown
+        meal = st.selectbox("What did you eat?", pd.DataFrame(sorted_menu)[['item']])
+        # meal = st.text_input("What did you eat?")
         d = st.text_area("When did you eat it?")
         
         # Adding the 'hot' functionality

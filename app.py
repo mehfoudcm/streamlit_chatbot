@@ -27,6 +27,12 @@ def run_query_eaten(t=3):
     return supabase.table("eaten").select("*").gte("date_eaten", date_str).execute()
 
 
+st.set_page_config(
+    page_title="Dinner Options",
+    page_icon="🍽️",
+    layout="wide"
+)
+
 
 # --- Main App Logic ---
 st.title("What's for dinner?")
